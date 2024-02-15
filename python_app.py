@@ -9,6 +9,7 @@ from plaid.model.link_token_create_request import LinkTokenCreateRequest
 from plaid.model.link_token_create_request_user import LinkTokenCreateRequestUser
 
 from plaid.model.accounts_balance_get_request import AccountsBalanceGetRequest
+from plaid.model.transactions_sync_request import TransactionsSyncRequest
 
 from plaid.model.country_code import CountryCode
 from plaid.model.products import Products
@@ -90,13 +91,43 @@ def exchange_token():
 
 @app.route('/api/balance_data', methods=['GET'])
 def get_balance_data():
-    access_token = session['access_token']
     balance_request = AccountsBalanceGetRequest(
         access_token = session["access_token"]
     )
     balance_response = client.accounts_balance_get(balance_request)
 
     return(balance_response.to_dict())
+
+@app.route('/api/transaction_data', methods=['GET'])
+def get_transaction_data():
+    transaction_request = TransactionsSyncRequest(
+        access_token = session["access_token"]
+    )
+    # response = client.transactions_sync(transaction_request)
+    response = {'response' : 'yes'}
+
+    print("transaction_requested")
+    return(response)
+
+
+@app.route('/api/is_account_connected', methods=['GET'])
+def account_connected():
+    if session["access_token"]:
+        return({'status' : True })
+    else:
+        return({'status' : False})
+    
+# Route for handling the login page logic
+from flask import Flask, render_template, redirect, url_for, request
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+            error = 'Invalid Credentials. Please try again.'
+        else:
+            return redirect(url_for('index'))
+    return render_template('login.html', error=error)
 
 if __name__ == '__main__':
     app.run(debug=True)

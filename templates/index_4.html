@@ -35,7 +35,7 @@
             console.log("Metadata:", metadata);
           },
           onExit: (error, metadata) => {
-            // console.log(error, metadata);
+            console.log(error, metadata);
           },
         });
 
@@ -47,13 +47,38 @@
         });
       })(jQuery);
 
+      // (async ($) => {
+      // const transHistoryButton = document.getElementById("show-transactions");
+      // transHistoryButton.addEventListener("click", async (event) => {
+      //     console.log("transaction button click");
+      //     await getTransactions();
+      //   });
+      // })(jQuery);
+
       // Retrieves balance information
       const getBalance = async function () {
         console.log("get balance");
         //await delay(5000);
         //console.log("Waited 5s");
         const response = await fetch("/api/balance_data", {
-      //const getTransactions = async function () {
+        //const getTransactions = async function () {
+        //const response = await fetch("/api/transaction_history", {
+          method: "GET",
+        });
+        const data = await response.json();
+
+        //Render response data
+        const pre = document.getElementById("response");
+        pre.textContent = JSON.stringify(data, null, 2);
+        pre.style.background = "#F6F6F6";
+      };
+
+      const getTransactions = async function () {
+        console.log("get transactions");
+        //await delay(5000);
+        //console.log("Waited 5s");
+        const response = await fetch("/api/transaction_data", {
+        //const getTransactions = async function () {
         //const response = await fetch("/api/transaction_history", {
           method: "GET",
         });
@@ -71,12 +96,34 @@
         const account = await fetch("/api/is_account_connected");
         const connected = await account.json();
         if (connected.status == true) {
-          getBalance();
-          //getTransactions();
+          // getBalance();
+          getTransactions();
         }
       };
 
       getStatus();
+    </script>
+    <script>
+      const transHistoryButton = document.getElementById("show-transactions");
+      transHistoryButton.addEventListener("click", async (event) => {
+        console.log("transaction button click");
+        try {
+          const response = await fetch("/api/exchange_public_token", {
+            method: "POST",
+            body: JSON.stringify({ public_token: publicToken }), // Assuming publicToken is defined somewhere
+            headers: {
+                "Content-Type": "application/json",
+            },
+          });
+            if (response.ok) {
+            await getTransactions();
+          } else {
+            console.error("Failed to exchange public token:", response.status);
+          }
+        } catch (error) {
+          console.error("Error:", error);
+        }
+      });
     </script>
   </head>
   <title>Plaid | Minimal Quickstart</title>
@@ -98,6 +145,25 @@
       "
     >
       <strong>Link account</strong>
+    </button>
+    <button
+      type="button"
+      onclick="getTransactions()"
+      id="show-transactions"
+      class="btn btn-primary btn-dark btn-lg"
+      style="
+        border: 1px solid black;
+        border-radius: 5px;
+        background: black;
+        height: 48px;
+        width: 155px;
+        margin-top: 5; 
+        margin-left: 10;
+        color: white;
+        font-size: 18px;
+      "
+    >
+      <strong>Show Trans</strong>
     </button>
     <pre
       id="response"

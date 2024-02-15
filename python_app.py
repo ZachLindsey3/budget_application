@@ -126,8 +126,24 @@ def login():
         if request.form['username'] != 'admin' or request.form['password'] != 'admin':
             error = 'Invalid Credentials. Please try again.'
         else:
-            return redirect(url_for('index'))
+            return redirect(url_for('plaid_login'))
     return render_template('login.html', error=error)
+
+@app.route('/plaid_login', methods=['GET', 'POST'])
+def plaid_login():
+    error = None
+    if request.method == 'POST':
+        if request.form['username'] != 'admin' or request.form['password'] != 'admin':
+            error = 'Invalid Credentials. Please try again.'
+        else:
+            return redirect(url_for('index'))
+    return render_template('plaid_login.html', error=error)
+
+@app.route('/plaid_login/print_test', methods = ['GET'])
+def print_test():
+    print("test world")
+    return redirect(url_for('index'))
+    # return(1)
 
 if __name__ == '__main__':
     app.run(debug=True)

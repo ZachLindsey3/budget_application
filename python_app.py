@@ -38,7 +38,7 @@ app.secret_key = "MY_SECRET_KEY"
 def index():
     plaid_client_id = clientId
 
-    return render_template('index_4.html', plaid_client_id=plaid_client_id)
+    return render_template('index.html', plaid_client_id=plaid_client_id)
 
 @app.route('/api/create_link_token', methods = ['GET'])
 def link_token():
@@ -96,6 +96,7 @@ def get_balance_data():
     )
     balance_response = client.accounts_balance_get(balance_request)
 
+    print("balance_requested")
     return(balance_response.to_dict())
 
 @app.route('/api/transaction_data', methods=['GET'])
@@ -103,11 +104,10 @@ def get_transaction_data():
     transaction_request = TransactionsSyncRequest(
         access_token = session["access_token"]
     )
-    # response = client.transactions_sync(transaction_request)
-    response = {'response' : 'yes'}
+    response = client.transactions_sync(transaction_request)
 
     print("transaction_requested")
-    return(response)
+    return(response.to_dict())
 
 
 @app.route('/api/is_account_connected', methods=['GET'])

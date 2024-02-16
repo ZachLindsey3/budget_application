@@ -1,6 +1,8 @@
 from flask import Flask, render_template, jsonify, request, session
 from keys import clientId, secret
 
+import request_lib as reqs
+
 import plaid
 from plaid.api import plaid_api
 
@@ -91,22 +93,12 @@ def exchange_token():
 
 @app.route('/api/balance_data', methods=['GET'])
 def get_balance_data():
-    balance_request = AccountsBalanceGetRequest(
-        access_token = session["access_token"]
-    )
-    balance_response = client.accounts_balance_get(balance_request)
-
-    print("balance_requested")
-    return(balance_response.to_dict())
+    response = reqs.get_balance_data(access_token=session["access_token"], client=client)
+    return(response.to_dict())
 
 @app.route('/api/transaction_data', methods=['GET'])
 def get_transaction_data():
-    transaction_request = TransactionsSyncRequest(
-        access_token = session["access_token"]
-    )
-    response = client.transactions_sync(transaction_request)
-
-    print("transaction_requested")
+    response = reqs.get_transaction_data(access_token=session["access_token"], client=client)
     return(response.to_dict())
 
 
@@ -143,7 +135,6 @@ def plaid_login():
 def print_test():
     print("test world")
     return redirect(url_for('index'))
-    # return(1)
 
 if __name__ == '__main__':
     app.run(debug=True)

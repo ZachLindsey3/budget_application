@@ -127,7 +127,7 @@
     </button>
     <button
       type="button"
-      onclick="getTransactions()"
+      onclick="showTable();getTransactions()"
       id="show-transactions"
       class="btn btn-primary btn-dark btn-lg"
       style="
@@ -157,6 +157,81 @@
       "
     ></pre>
   </body>
+
+  <script>
+    function showTable(){
+      // const response = fetch("/api/test_table", {
+      //     method: "GET",
+      //   });
+      //   const data = response.json();
+      fetch("/api/test_table")
+        .then(response => response.json())
+        .then(data => createTableTest(data));
+    }
+
+    function createTable(data) {
+      var table = "<table border=1>";
+      // add a row for name and marks
+      table += `<tr>
+                  <th>Name</th>
+                  <th colspan="4">Marks</th>
+                </tr>`;
+      // now add another row to show subject
+      table += `<tr>
+                  <th></th>
+                  <th>Math</th>
+                  <th>English</th>
+                  <th>Chemistry</th>
+                  <th>Physics</th>
+                </tr>`;
+      // now loop through students
+      // show their name and marks
+      var tr = "";
+      for(let i = 0; i < data.result.length; i++) {
+        tr += "<tr>";
+        tr += `<td>${data.result[i].name}</td>`;
+        for (var key in data.result[i].marks) {
+          tr += `<td>${data.result[i].marks[key]}</td>`;
+        }
+        tr += "</tr>"
+      }
+      table += tr + "</table>";
+
+      // append table to body
+      document.body.innerHTML += table;
+    }
+    function createTableTest(data) {
+      var table = "<table border=1>";
+      // add a row for name and marks
+      table += `<tr>
+                  <th>Name</th>
+                  <th colspan="2">Stuff</th>
+                </tr>`;
+      // now add another row to show subject
+      table += `<tr>
+                  <th></th>
+                  <th>amount</th>
+                  <th>currency</th>
+                </tr>`;
+      // now loop through students
+      // show their name and marks
+      var tr = "";
+      for(let i = 0; i < data.result.length; i++) {
+        tr += "<tr>";
+        tr += `<td>${data.result[i].merchant_name}</td>`;
+        tr += `<td>${data.result[i].amount}</td>`;
+        tr += `<td>${data.result[i].iso_currency_code}</td>`;
+        // for (var key in data.result[i].marks) {
+        //   tr += `<td>${data.result[i].marks[key]}</td>`;
+        // }
+        tr += "</tr>"
+      }
+      table += tr + "</table>";
+
+      // append table to body
+      document.body.innerHTML += table;
+    }
+  </script>
 
   <table class="table">
     <thead class="thead-dark">

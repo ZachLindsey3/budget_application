@@ -101,6 +101,69 @@ def get_transaction_data():
     response = reqs.get_transaction_data(access_token=session["access_token"], client=client)
     return(response.to_dict())
 
+@app.route('/api/test_table', methods=['GET'])
+def test_table_response():
+    trans_response = reqs.get_transaction_data(access_token=session["access_token"], client=client).to_dict()
+    added_list = trans_response['added']
+    test_response = dict()
+    result_list = []
+    for transaction in added_list:
+        result_list.append({"amount" : transaction["amount"], "iso_currency_code" : transaction["iso_currency_code"], "merchant_name" : transaction["merchant_name"]})
+
+    test_response['result'] = result_list
+    print(test_response)
+
+    response = {
+        "result": [
+            {
+            "name": "John",
+            "marks": {
+                "math": "78",
+                "english": "90",
+                "chemistry": "64",
+                "physics": "89"
+            }
+            },
+            {
+            "name": "Mike",
+            "marks": {
+                "math": "67",
+                "english": "86",
+                "chemistry": "59",
+                "physics": "70"
+            }
+            },
+            {
+            "name": "Julia",
+            "marks": {
+                "math": "82",
+                "english": "75",
+                "chemistry": "73",
+                "physics": "84"
+            }
+            },
+            {
+            "name": "Tom",
+            "marks": {
+                "math": "76",
+                "english": "64",
+                "chemistry": "59",
+                "physics": "72"
+            }
+            },
+            {
+            "name": "Barbara",
+            "marks": {
+                "math": "90",
+                "english": "85",
+                "chemistry": "88",
+                "physics": "92"
+            }
+            }
+        ]
+    }
+    return(test_response)
+
 
 @app.route('/api/is_account_connected', methods=['GET'])
 def account_connected():

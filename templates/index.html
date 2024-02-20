@@ -201,66 +201,31 @@
       document.body.innerHTML += table;
     }
     function createTableTest(data) {
-      var table = "<table border=1>";
-      // add a row for name and marks
-      table += `<tr>
-                  <th>Name</th>
-                  <th colspan="2">Stuff</th>
-                </tr>`;
+      var table = `<table class="table">`;
       // now add another row to show subject
-      table += `<tr>
-                  <th></th>
-                  <th>amount</th>
-                  <th>currency</th>
-                </tr>`;
+      table += `<thead class="thead-dark">
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Currency</th>
+                  </tr>
+                </thead>`;
       // now loop through students
       // show their name and marks
-      var tr = "";
+      var tr = "<tbody>";
       for(let i = 0; i < data.result.length; i++) {
-        tr += "<tr>";
+        tr += `<th scope="row">${i}</th>`;
         tr += `<td>${data.result[i].merchant_name}</td>`;
         tr += `<td>${data.result[i].amount}</td>`;
         tr += `<td>${data.result[i].iso_currency_code}</td>`;
-        // for (var key in data.result[i].marks) {
-        //   tr += `<td>${data.result[i].marks[key]}</td>`;
-        // }
         tr += "</tr>"
       }
+      tr += "</tbody>"
       table += tr + "</table>";
 
       // append table to body
       document.body.innerHTML += table;
     }
   </script>
-
-  <table class="table">
-    <thead class="thead-dark">
-      <tr>
-        <th scope="col">#</th>
-        <th scope="col">First</th>
-        <th scope="col">Last</th>
-        <th scope="col">Handle</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr>
-        <th scope="row">1</th>
-        <td>Mark</td>
-        <td>Otto</td>
-        <td>@mdo</td>
-      </tr>
-      <tr>
-        <th scope="row">2</th>
-        <td>Jacob</td>
-        <td>Thornton</td>
-        <td>@fat</td>
-      </tr>
-      <tr>
-        <th scope="row">3</th>
-        <td>Larry</td>
-        <td>the Bird</td>
-        <td>@twitter</td>
-      </tr>
-    </tbody>
-  </table>
 </html>

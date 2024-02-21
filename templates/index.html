@@ -103,6 +103,31 @@
 
       // getStatus();
     </script>
+    <style>
+      #overlay {
+        position: fixed;
+        display: none;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: rgba(0,0,0,0.5);
+        z-index: 2;
+        cursor: pointer;
+      }
+      
+      #text{
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        font-size: 50px;
+        color: white;
+        transform: translate(-50%,-50%);
+        -ms-transform: translate(-50%,-50%);
+      }
+      </style>
   </head>
   <title>Plaid | Minimal Quickstart</title>
   <body>
@@ -156,7 +181,25 @@
         font-size: 14px;
       "
     ></pre>
+    <div id="overlay" onclick="off()">
+      <div id="text">Overlay Text</div>
+    </div>
+    
+    <div style="padding:20px">
+      <button onclick="on()">Turn on overlay effect</button>
+    </div>
   </body>
+
+  <script>
+    function on() {
+      document.getElementById("text").innerHTML = "altered text";
+      document.getElementById("overlay").style.display = "block";
+    }
+    
+    function off() {
+      document.getElementById("overlay").style.display = "none";
+    }
+  </script>
 
   <script>
     function showTable(){
@@ -169,37 +212,6 @@
         .then(data => createTableTest(data));
     }
 
-    function createTable(data) {
-      var table = "<table border=1>";
-      // add a row for name and marks
-      table += `<tr>
-                  <th>Name</th>
-                  <th colspan="4">Marks</th>
-                </tr>`;
-      // now add another row to show subject
-      table += `<tr>
-                  <th></th>
-                  <th>Math</th>
-                  <th>English</th>
-                  <th>Chemistry</th>
-                  <th>Physics</th>
-                </tr>`;
-      // now loop through students
-      // show their name and marks
-      var tr = "";
-      for(let i = 0; i < data.result.length; i++) {
-        tr += "<tr>";
-        tr += `<td>${data.result[i].name}</td>`;
-        for (var key in data.result[i].marks) {
-          tr += `<td>${data.result[i].marks[key]}</td>`;
-        }
-        tr += "</tr>"
-      }
-      table += tr + "</table>";
-
-      // append table to body
-      document.body.innerHTML += table;
-    }
     function createTableTest(data) {
       var table = `<table class="table">`;
       // now add another row to show subject
@@ -216,7 +228,7 @@
       var tr = "<tbody>";
       for(let i = 0; i < data.result.length; i++) {
         tr += `<th scope="row">${i}</th>`;
-        tr += `<td>${data.result[i].merchant_name}</td>`;
+        tr += `<td onclick="on()">${data.result[i].merchant_name}</td>`;
         tr += `<td>${data.result[i].amount}</td>`;
         tr += `<td>${data.result[i].iso_currency_code}</td>`;
         tr += "</tr>"

@@ -17,3 +17,6 @@ def get_balance_data(access_token, client):
 
     print("balance_requested")
     return(balance_response)
+
+def transaction_data_table(access_token, client):
+    response = get_transaction_data(access_token=access_token, client=client)
